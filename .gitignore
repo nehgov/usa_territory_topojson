@@ -1,0 +1,61 @@
+# .gitignore
+
+# -------------
+# general
+# -------------
+
+# all files/directories starting with underscore
+_*
+
+# -------------
+# directories
+# -------------
+
+# only keep README in data/ to maintain project structure
+!data/
+data/*
+!/data/README.md
+
+# -------------
+# TeX
+# -------------
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fff
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*..synctex.gz
+*.toc
+*.ttt
+
+# -------------
+# pandoc
+# -------------
+*.pandoc
+
+# -------------
+# R
+# -------------
+*.RData
+*.Rhistory
+*.Rproj
+
+# -------------
+# compiled
+# -------------
+*.o
+
+# -------------
+# MacOS
+# -------------
+*.DS_Store
+
