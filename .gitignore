@@ -15,6 +15,7 @@ _*
 !data/
 data/*
 !/data/README.md
+!/data/json
 
 # -------------
 # TeX
