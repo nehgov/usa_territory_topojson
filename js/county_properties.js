@@ -1,9 +1,12 @@
 const shapefile = require("shapefile");
+const argv = process.argv;
+const county_shp_file = argv[2];
+const state_shp_file = argv[3];
 
 Promise.all([
   parseInput(),
-  shapefile.read("data/shp/cb_2023_us_county_5m.shp", undefined, {encoding: "utf-8"}),
-  shapefile.read("data/shp/cb_2023_us_state_5m.shp", undefined, {encoding: "utf-8"})
+  shapefile.read(county_shp_file, undefined, {encoding: "utf-8"}),
+  shapefile.read(state_shp_file, undefined, {encoding: "utf-8"})
 ]).then(output);
 
 function parseInput() {
