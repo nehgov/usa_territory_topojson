@@ -4,42 +4,91 @@
 <script src="./assets/js/topojson.min.js"></script>
 <script src="./assets/js/geoalbersuster.js"></script>
 
+<select id = "opts">
+  <option value="county_2023">County 2023</option>
+  <option value="county_2022">County 2022</option>
+  <option value="county_2021">County 2021</option>
+  <option value="county_2020">County 2020</option>
+  <option value="county_2019">County 2019</option>
+  <option value="county_2018">County 2018</option>
+  <option value="county_2017">County 2017</option>
+  <option value="county_2016">County 2016</option>
+  <option value="county_2015">County 2015</option>
+  <option value="county_2014">County 2014</option>
+  <option value="cdistrict_2023">Congressional district 2023</option>
+  <option value="cdistrict_2022">Congressional district 2022</option>
+  <option value="cdistrict_2021">Congressional district 2021</option>
+  <option value="cdistrict_2020">Congressional district 2020</option>
+  <option value="cdistrict_2019">Congressional district 2019</option>
+  <option value="cdistrict_2018">Congressional district 2018</option>
+  <option value="cdistrict_2017">Congressional district 2017</option>
+  <option value="cdistrict_2016">Congressional district 2016</option>
+  <option value="cdistrict_2015">Congressional district 2015</option>
+  <option value="cdistrict_2014">Congressional district 2014</option>
+</select>
+
 <svg id="map" width = "1280" height = "800"></svg>
 
 <script>
-  
-  // load data and run
-  Promise.all([
-      d3.json("./data/json/county.json")
-  ]).then(function([us]){
+  let testString = function(x) {
+      switch(true) {
+      case /county/.test(x):
+          return "counties";
+          break;
+      case /cdistrict/.test(x):
+          return "cdistricts";
+          break;
+      }
+  }
+  let loadData = function(datastr) {
+      
+      // load data and run
+      Promise.all([
+          d3.json("./data/json/" + datastr + ".json")
+      ]).then(function([us]){
 
-            // where the map is going
-      const svg = d3.select("svg"),
-            width = +svg.attr("width"),
-            height = +svg.attr("height");
-      
-      // map and projection
-      const projection = geoAlbersUsaTerritories.geoAlbersUsaTerritories()
-            .scale(1280)
-            .translate([width / 2, height / 2]);
-      const path = d3.geoPath().projection(projection);
-      
-      // draw counties
-      svg.append("g")
-          .selectAll("path")
-          .data(topojson.feature(us, us.objects.counties).features)
-          .join("path")
-          .attr("fill", "none")
-          .attr("stroke", "lightgrey")
-          .attr("d", path);
-      
-      // draw state outlines
-      svg.append("path")
-          .datum(topojson.mesh(us, us.objects.states))
-          .attr("fill", "none")
-          .attr("stroke", "darkgrey")
-          .attr("stroke-linejoin", "round")
-          .attr("d", path);
-  })
+          const basegeo = testString(datastr);
+          
+          // where the map is going
+          const svg = d3.select("svg"),
+                width = +svg.attr("width"),
+                height = +svg.attr("height");
+          
+          // map and projection
+          const projection = geoAlbersUsaTerritories.geoAlbersUsaTerritories()
+                .scale(1280)
+                .translate([width / 2, height / 2]);
+          const path = d3.geoPath().projection(projection);
+
+          // drop old so it doesn't just keep appending
+          svg.selectAll("path").remove();
+          
+          // draw counties
+          svg.append("g")
+              .selectAll("path")
+              .data(topojson.feature(us, us.objects[basegeo]).features)
+              .join("path")
+              .attr("fill", "none")
+              .attr("stroke", "lightgrey")
+              .attr("d", path);
+          
+          // draw state outlines
+          svg.append("path")
+              .datum(topojson.mesh(us, us.objects.states))
+              .attr("fill", "none")
+              .attr("stroke", "darkgrey")
+              .attr("stroke-linejoin", "round")
+              .attr("d", path);
+      })
+  }
+
+  loadData("county_2023");
+
+  // handle on click event
+  d3.select('#opts')
+    .on('change', function() {
+        var newData = d3.select(this).property('value');
+        loadData(newData);
+  });
   
 </script>
