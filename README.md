@@ -43,4 +43,17 @@ Each file contains boundaries for its level as well as those above it.
 - State levels:
   - `state`
   - `nation`
+  
+## Checking maps
 
+If you would like to visualize the maps, start a local server in the root
+directory (see: npm local-web-server) and visit localhost page. From there, you
+can select the various maps via a dropdown menu.
+
+``` bash
+$ > npm install local-web-server
+$ > npx ws
+```
+Paste `http://127.0.0.1:8000` in your browser.
+
+![Check maps locally](./img/check_map.png)
