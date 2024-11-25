@@ -4,7 +4,19 @@
 <script src="./assets/js/topojson.min.js"></script>
 <script src="./assets/js/geoalbersuster.js"></script>
 
+<h1>TEST: checking maps</h1>
+
 <select id = "opts">
+  <option value="state_2023">State 2023</option>
+  <option value="state_2022">State 2022</option>
+  <option value="state_2021">State 2021</option>
+  <option value="state_2020">State 2020</option>
+  <option value="state_2019">State 2019</option>
+  <option value="state_2018">State 2018</option>
+  <option value="state_2017">State 2017</option>
+  <option value="state_2016">State 2016</option>
+  <option value="state_2015">State 2015</option>
+  <option value="state_2014">State 2014</option>
   <option value="county_2023">County 2023</option>
   <option value="county_2022">County 2022</option>
   <option value="county_2021">County 2021</option>
@@ -27,6 +39,7 @@
   <option value="cdistrict_2014">Congressional district 2014</option>
 </select>
 
+
 <svg id="map" width = "1280" height = "800"></svg>
 
 <script>
@@ -37,6 +50,9 @@
           break;
       case /cdistrict/.test(x):
           return "cdistricts";
+          break;
+      case /state/.test(x):
+          return "states";
           break;
       }
   }
@@ -62,27 +78,41 @@
 
           // drop old so it doesn't just keep appending
           svg.selectAll("path").remove();
-          
-          // draw counties
-          svg.append("g")
-              .selectAll("path")
-              .data(topojson.feature(us, us.objects[basegeo]).features)
-              .join("path")
-              .attr("fill", "none")
-              .attr("stroke", "lightgrey")
-              .attr("d", path);
-          
-          // draw state outlines
-          svg.append("path")
-              .datum(topojson.mesh(us, us.objects.states))
-              .attr("fill", "none")
-              .attr("stroke", "darkgrey")
-              .attr("stroke-linejoin", "round")
-              .attr("d", path);
-      })
+
+          if (basegeo !== "states") {
+              // draw counties / congressional districts
+              svg.append("g")
+                  .selectAll("path")
+                  .data(topojson.feature(us, us.objects[basegeo]).features)
+                  .join("path")
+                  .attr("fill", "none")
+                  .attr("stroke", "lightgrey")
+                  .attr("d", path);
+              
+              // draw state outlines
+              svg.append("path")
+                  .datum(topojson.mesh(us, us.objects.states))
+                  .attr("fill", "none")
+                  .attr("stroke", "darkgrey")
+                  .attr("stroke-linejoin", "round")
+                  .attr("d", path);
+
+          } else {
+              // draw states
+              svg.append("g")
+                  .selectAll("path")
+                  .data(topojson.feature(us, us.objects[basegeo]).features)
+                  .join("path")
+                  .attr("fill", "none")
+                  .attr("stroke", "darkgrey")
+                  .attr("d", path);
+              
+          }
+          })
+
   }
 
-  loadData("county_2023");
+  loadData("state_2023");
 
   // handle on click event
   d3.select('#opts')
