@@ -9,6 +9,58 @@
 #
 ################################################################################
 
+usage()
+{
+    cat <<EOF
+
+ PURPOSE:
+ This script builds topojson files from US Census shapefiles.
+
+ USAGE:
+ $0 <arguments>
+
+ ARGUMENTS:
+    [-y]       Survey year
+    [-r]       Resolution: 500k, 5m, 20m
+
+ EXAMPLE:
+
+ ./build -y 2022 -r 5m
+ ./build -y 2020 -r 500k
+
+EOF
+}
+
+y_flag=0
+r_flag=0
+
+while getopts "hy:r:" opt;
+do
+    case $opt in
+	h)
+	    usage
+	    exit 1
+	    ;;
+	y)
+	    yr=$OPTARG
+	    ;;
+	r)
+	    res=$OPTARG
+	    ;;
+	\?)
+	    usage
+	    exit 1
+	    ;;
+    esac
+done
+
+# check for missing arguments
+if (( $y_flag==0 )) || (( $r_flag==0 )); then
+    echo "Missing one or more arguments"
+    usage
+    exit 1
+fi
+
 # --- directories --------------------------------
 
 DAT_DIR=data
@@ -17,11 +69,6 @@ SHP_DIR=${DAT_DIR}/shp
 SCR_DIR=js
 
 # --- variables ----------------------------------
-
-# year (call from command line argument:
-# e.g.,
-# $> ./build.sh 2023
-yr=$1
 
 # census tiger file base url (using cartographic boundary files)
 # https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
@@ -36,29 +83,29 @@ base_url=https://www2.census.gov/geo/tiger/GENZ${yr}/shp
 # NB: congressional districts are labeled with their congressional session
 # numbers, which means we need if/else statements to make sure we get the right
 # file name when using the calendar year
-ct_stub=cb_${yr}_us_county_5m
-st_stub=cb_${yr}_us_state_5m
+ct_stub=cb_${yr}_us_county_${res}
+st_stub=cb_${yr}_us_state_${res}
 if [[ ${yr} -eq 2023 || ${yr} -eq 2022 ]]; then
-	cd_stub=cb_${yr}_us_cd118_5m
+	cd_stub=cb_${yr}_us_cd118_${res}
 elif [[ ${yr} -eq 2021 || ${yr} -eq 2020 || ${yr} -eq 2019 || ${yr} -eq 2018 ]]; then
-	cd_stub=cb_${yr}_us_cd116_5m
+	cd_stub=cb_${yr}_us_cd116_${res}
 elif [[ ${yr} -eq 2017 || ${yr} -eq 2016 ]]; then
-	cd_stub=cb_${yr}_us_cd115_5m
+	cd_stub=cb_${yr}_us_cd115_${res}
 elif [[ ${yr} -eq 2015 || ${yr} -eq 2014 ]]; then
-	cd_stub=cb_${yr}_us_cd114_5m
+	cd_stub=cb_${yr}_us_cd114_${res}
 fi
 
 # outputs
 #
-# name of geographic level plus year: county_2023.json
+# name of geographic level plus year: county_5m_2023.json
 #
 # NB: the congressional districts will be redundant for multiple years, which
 # may be accounted in later code to reduce transferring multiple versions of the
 # same file (i.e., save bandwidth), but it's still good to have a file for each
 # year for consistency
-ct_json=county_${yr}.json
-st_json=state_${yr}.json
-cd_json=cdistrict_${yr}.json
+ct_json=county_${res}_${yr}.json
+st_json=state_${res}_${yr}.json
+cd_json=cdistrict_${res}_${yr}.json
 
 # --- clean up -----------------------------------
 
@@ -68,7 +115,7 @@ cd_json=cdistrict_${yr}.json
 # and json subdirectories in the /data directory if they don't exist
 
 echo "  - Removing old topojson files"
-rm -f ${GEO_DIR}/*_${yr}.json
+rm -f ${GEO_DIR}/*_${res}_${yr}.json
 mkdir -p ${GEO_DIR} ${SHP_DIR}
 
 # --- download -----------------------------------
@@ -166,7 +213,7 @@ npx geo2topo -q 1e5 -n counties=${GEO_DIR}/county_tmp.json \
 # congressional districts
 echo "  - Converting CONGRESSIONAL DISTRICT shapefile to topojson"
 npx shp2json --encoding utf-8 -n ${SHP_DIR}/${cd_stub}.shp \
-	| npx ndjson-filter '!/000$/.test(d.properties.GEOID)' \
+	| npx ndjson-filter '!/0000$/.test(d.properties.GEOID)' \
 	| npx ndjson-map '(d.id = d.properties.GEOID, delete d.properties, d)' \
 	> ${GEO_DIR}/cdistrict_tmp.json
 
