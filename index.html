@@ -4,43 +4,126 @@
 <script src="./assets/js/topojson.min.js"></script>
 <script src="./assets/js/geoalbersuster.js"></script>
 
-<h1>TEST: checking maps</h1>
-
 <select id = "opts">
-  <option value="state_2023">State 2023</option>
-  <option value="state_2022">State 2022</option>
-  <option value="state_2021">State 2021</option>
-  <option value="state_2020">State 2020</option>
-  <option value="state_2019">State 2019</option>
-  <option value="state_2018">State 2018</option>
-  <option value="state_2017">State 2017</option>
-  <option value="state_2016">State 2016</option>
-  <option value="state_2015">State 2015</option>
-  <option value="state_2014">State 2014</option>
-  <option value="county_2023">County 2023</option>
-  <option value="county_2022">County 2022</option>
-  <option value="county_2021">County 2021</option>
-  <option value="county_2020">County 2020</option>
-  <option value="county_2019">County 2019</option>
-  <option value="county_2018">County 2018</option>
-  <option value="county_2017">County 2017</option>
-  <option value="county_2016">County 2016</option>
-  <option value="county_2015">County 2015</option>
-  <option value="county_2014">County 2014</option>
-  <option value="cdistrict_2023">Congressional district 2023</option>
-  <option value="cdistrict_2022">Congressional district 2022</option>
-  <option value="cdistrict_2021">Congressional district 2021</option>
-  <option value="cdistrict_2020">Congressional district 2020</option>
-  <option value="cdistrict_2019">Congressional district 2019</option>
-  <option value="cdistrict_2018">Congressional district 2018</option>
-  <option value="cdistrict_2017">Congressional district 2017</option>
-  <option value="cdistrict_2016">Congressional district 2016</option>
-  <option value="cdistrict_2015">Congressional district 2015</option>
-  <option value="cdistrict_2014">Congressional district 2014</option>
+  <optgroup label="Resolution: 500k">
+    <optgroup label="&nbsp;&nbsp;State">
+      <option value="state_500k_2014">State 2014 (500k)</option>
+      <option value="state_500k_2015">State 2015 (500k)</option>
+      <option value="state_500k_2016">State 2016 (500k)</option>
+      <option value="state_500k_2017">State 2017 (500k)</option>
+      <option value="state_500k_2018">State 2018 (500k)</option>
+      <option value="state_500k_2019">State 2019 (500k)</option>
+      <option value="state_500k_2020">State 2020 (500k)</option>
+      <option value="state_500k_2021">State 2021 (500k)</option>
+      <option value="state_500k_2022">State 2022 (500k)</option>
+      <option value="state_500k_2023">State 2023 (500k)</option>
+    </optgroup>
+    <optgroup label="&nbsp;&nbsp;County">
+      <option value="county_500k_2014">County 2014 (500k)</option>
+      <option value="county_500k_2015">County 2015 (500k)</option>
+      <option value="county_500k_2016">County 2016 (500k)</option>
+      <option value="county_500k_2017">County 2017 (500k)</option>
+      <option value="county_500k_2018">County 2018 (500k)</option>
+      <option value="county_500k_2019">County 2019 (500k)</option>
+      <option value="county_500k_2020">County 2020 (500k)</option>
+      <option value="county_500k_2021">County 2021 (500k)</option>
+      <option value="county_500k_2022">County 2022 (500k)</option>
+      <option value="county_500k_2023">County 2023 (500k)</option>
+    </optgroup>
+    <optgroup label="&nbsp;&nbsp;Congressional district">
+      <option value="cdistrict_500k_2014">Congressional District 2014 (500k)</option>
+      <option value="cdistrict_500k_2015">Congressional District 2015 (500k)</option>
+      <option value="cdistrict_500k_2016">Congressional District 2016 (500k)</option>
+      <option value="cdistrict_500k_2017">Congressional District 2017 (500k)</option>
+      <option value="cdistrict_500k_2018">Congressional District 2018 (500k)</option>
+      <option value="cdistrict_500k_2019">Congressional District 2019 (500k)</option>
+      <option value="cdistrict_500k_2020">Congressional District 2020 (500k)</option>
+      <option value="cdistrict_500k_2021">Congressional District 2021 (500k)</option>
+      <option value="cdistrict_500k_2022">Congressional District 2022 (500k)</option>
+      <option value="cdistrict_500k_2023">Congressional District 2023 (500k)</option>
+    </optgroup>
+  </optgroup>
+  <optgroup label="Resolution: 5m">
+    <optgroup label="&nbsp;&nbsp;State">
+      <option value="state_5m_2014">State 2014 (5m)</option>
+      <option value="state_5m_2015">State 2015 (5m)</option>
+      <option value="state_5m_2016">State 2016 (5m)</option>
+      <option value="state_5m_2017">State 2017 (5m)</option>
+      <option value="state_5m_2018">State 2018 (5m)</option>
+      <option value="state_5m_2019">State 2019 (5m)</option>
+      <option value="state_5m_2020">State 2020 (5m)</option>
+      <option value="state_5m_2021">State 2021 (5m)</option>
+      <option value="state_5m_2022">State 2022 (5m)</option>
+      <option value="state_5m_2023">State 2023 (5m)</option>
+    </optgroup>
+    <optgroup label="&nbsp;&nbsp;County">
+      <option value="county_5m_2014">County 2014 (5m)</option>
+      <option value="county_5m_2015">County 2015 (5m)</option>
+      <option value="county_5m_2016">County 2016 (5m)</option>
+      <option value="county_5m_2017">County 2017 (5m)</option>
+      <option value="county_5m_2018">County 2018 (5m)</option>
+      <option value="county_5m_2019">County 2019 (5m)</option>
+      <option value="county_5m_2020">County 2020 (5m)</option>
+      <option value="county_5m_2021">County 2021 (5m)</option>
+      <option value="county_5m_2022">County 2022 (5m)</option>
+      <option value="county_5m_2023">County 2023 (5m)</option>
+    </optgroup>
+    <optgroup label="&nbsp;&nbsp;Congressional district">
+      <option value="cdistrict_5m_2014">Congressional District 2014 (5m)</option>
+      <option value="cdistrict_5m_2015">Congressional District 2015 (5m)</option>
+      <option value="cdistrict_5m_2016">Congressional District 2016 (5m)</option>
+      <option value="cdistrict_5m_2017">Congressional District 2017 (5m)</option>
+      <option value="cdistrict_5m_2018">Congressional District 2018 (5m)</option>
+      <option value="cdistrict_5m_2019">Congressional District 2019 (5m)</option>
+      <option value="cdistrict_5m_2020">Congressional District 2020 (5m)</option>
+      <option value="cdistrict_5m_2021">Congressional District 2021 (5m)</option>
+      <option value="cdistrict_5m_2022">Congressional District 2022 (5m)</option>
+      <option value="cdistrict_5m_2023">Congressional District 2023 (5m)</option>
+    </optgroup>
+  </optgroup>
+  <optgroup label="Resolution: 20m">
+    <optgroup label="&nbsp;&nbsp;State">
+      <option value="state_20m_2014">State 2014 (20m)</option>
+      <option value="state_20m_2015">State 2015 (20m)</option>
+      <option value="state_20m_2016">State 2016 (20m)</option>
+      <option value="state_20m_2017">State 2017 (20m)</option>
+      <option value="state_20m_2018">State 2018 (20m)</option>
+      <option value="state_20m_2019">State 2019 (20m)</option>
+      <option value="state_20m_2020">State 2020 (20m)</option>
+      <option value="state_20m_2021">State 2021 (20m)</option>
+      <option value="state_20m_2022">State 2022 (20m)</option>
+      <option value="state_20m_2023">State 2023 (20m)</option>
+    </optgroup>
+    <optgroup label="&nbsp;&nbsp;County">
+      <option value="county_20m_2014">County 2014 (20m)</option>
+      <option value="county_20m_2015">County 2015 (20m)</option>
+      <option value="county_20m_2016">County 2016 (20m)</option>
+      <option value="county_20m_2017">County 2017 (20m)</option>
+      <option value="county_20m_2018">County 2018 (20m)</option>
+      <option value="county_20m_2019">County 2019 (20m)</option>
+      <option value="county_20m_2020">County 2020 (20m)</option>
+      <option value="county_20m_2021">County 2021 (20m)</option>
+      <option value="county_20m_2022">County 2022 (20m)</option>
+      <option value="county_20m_2023">County 2023 (20m)</option>
+    </optgroup>
+    <optgroup label="&nbsp;&nbsp;Congressional district">
+      <option value="cdistrict_20m_2014">Congressional District 2014 (20m)</option>
+      <option value="cdistrict_20m_2015">Congressional District 2015 (20m)</option>
+      <option value="cdistrict_20m_2016">Congressional District 2016 (20m)</option>
+      <option value="cdistrict_20m_2017">Congressional District 2017 (20m)</option>
+      <option value="cdistrict_20m_2018">Congressional District 2018 (20m)</option>
+      <option value="cdistrict_20m_2019">Congressional District 2019 (20m)</option>
+      <option value="cdistrict_20m_2020">Congressional District 2020 (20m)</option>
+      <option value="cdistrict_20m_2021">Congressional District 2021 (20m)</option>
+      <option value="cdistrict_20m_2022">Congressional District 2022 (20m)</option>
+      <option value="cdistrict_20m_2023">Congressional District 2023 (20m)</option>
+    </optgroup>
+  </optgroup>
 </select>
 
-
 <svg id="map" width = "1280" height = "800"></svg>
+
+<div id="note"></div>
 
 <script>
   let testString = function(x) {
@@ -56,6 +139,19 @@
           break;
       }
   }
+  let getRes = function(x) {
+      switch(true) {
+      case /500k/.test(x):
+          return "high";
+          break;
+      case /5m/.test(x):
+          return "med";
+          break;
+      case /20m/.test(x):
+          return "low";
+          break;
+      }
+  }
   let loadData = function(datastr) {
       
       // load data and run
@@ -64,6 +160,7 @@
       ]).then(function([us]){
 
           const basegeo = testString(datastr);
+          const resolution = getRes(datastr);
           
           // where the map is going
           const svg = d3.select("svg"),
@@ -108,11 +205,23 @@
                   .attr("d", path);
               
           }
-          })
+
+          var notetext = "Note: Small geographic areas may be dropped ";
+          notetext += "from lower resolution files (20m)."
+          var div = document.getElementById("note");
+          div.innerHTML = "";
+          var note = document.createTextNode(notetext);
+
+          if (resolution === "low") {
+              var para = document.createElement("p");
+              para.appendChild(note);
+              div.appendChild(para);
+          }               
+      })
 
   }
 
-  loadData("state_2023");
+  loadData("state_500k_2014");
 
   // handle on click event
   d3.select('#opts')

@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+#!/usr/bin/env sh
 #################################################################################
 #
 # [ PROJ ] Spatial
@@ -37,20 +36,22 @@ r_flag=0
 while getopts "hy:r:" opt;
 do
     case $opt in
-	h)
-	    usage
-	    exit 1
-	    ;;
-	y)
-	    yr=$OPTARG
-	    ;;
-	r)
-	    res=$OPTARG
-	    ;;
-	\?)
-	    usage
-	    exit 1
-	    ;;
+    h)
+        usage
+        exit 1
+        ;;
+    y)
+        yr=$OPTARG
+        y_flag=1
+        ;;
+    r)
+        res=$OPTARG
+        r_flag=1
+        ;;
+    \?)
+        usage
+        exit 1
+        ;;
     esac
 done
 
@@ -63,10 +64,11 @@ fi
 
 # --- directories --------------------------------
 
-DAT_DIR=data
+ROOT="../.."
+DAT_DIR=${ROOT}/data
 GEO_DIR=${DAT_DIR}/json
 SHP_DIR=${DAT_DIR}/shp
-SCR_DIR=js
+JVS_DIR=${ROOT}/js
 
 # --- variables ----------------------------------
 
@@ -76,24 +78,27 @@ base_url=https://www2.census.gov/geo/tiger/GENZ${yr}/shp
 
 # inputs
 #
-# ct := county
 # st := state
+# ct := county
 # cd := congressional district
 #
+st_stub=cb_${yr}_us_state_${res}
+ct_stub=cb_${yr}_us_county_${res}
+
 # NB: congressional districts are labeled with their congressional session
 # numbers, which means we need if/else statements to make sure we get the right
 # file name when using the calendar year
-ct_stub=cb_${yr}_us_county_${res}
-st_stub=cb_${yr}_us_state_${res}
-if [[ ${yr} -eq 2023 || ${yr} -eq 2022 ]]; then
-	cd_stub=cb_${yr}_us_cd118_${res}
-elif [[ ${yr} -eq 2021 || ${yr} -eq 2020 || ${yr} -eq 2019 || ${yr} -eq 2018 ]]; then
-	cd_stub=cb_${yr}_us_cd116_${res}
-elif [[ ${yr} -eq 2017 || ${yr} -eq 2016 ]]; then
-	cd_stub=cb_${yr}_us_cd115_${res}
-elif [[ ${yr} -eq 2015 || ${yr} -eq 2014 ]]; then
-	cd_stub=cb_${yr}_us_cd114_${res}
+if ((yr == 2014 || yr == 2015)); then
+    session=114
+elif ((yr == 2016 || yr == 2017)); then
+    session=115
+elif ((yr >= 2018 && yr <= 2021)); then
+    session=116
+elif ((yr == 2022 || yr == 2023)); then
+    session=118
 fi
+
+cd_stub=cb_${yr}_us_cd${session}_${res}
 
 # outputs
 #
@@ -120,7 +125,7 @@ mkdir -p ${GEO_DIR} ${SHP_DIR}
 
 # --- download -----------------------------------
 
-# if the geographic level + year (e.g., county_2023) doesn't exist in the
+# if the geographic level + year (e.g., county_5m_2023) doesn't exist in the
 # shapefile subdirectory:
 #
 # 1) the zip file will be downloaded from the Census website
@@ -207,7 +212,7 @@ npx geo2topo -q 1e5 -n counties=${GEO_DIR}/county_tmp.json \
 	| npx toposimplify -f -s 1e-7 \
 	| npx topomerge states=counties -k 'd.id.slice(0,2)' \
 	| npx topomerge nation=states \
-	| node ${SCR_DIR}/county_properties.js ${SHP_DIR}/${ct_stub}.shp ${SHP_DIR}/${st_stub}.shp \
+	| node ${JVS_DIR}/county_properties.js ${SHP_DIR}/${ct_stub}.shp ${SHP_DIR}/${st_stub}.shp \
 	> ${GEO_DIR}/${ct_json}
 
 # congressional districts
@@ -221,7 +226,7 @@ npx geo2topo -q 1e5 -n cdistricts=${GEO_DIR}/cdistrict_tmp.json \
 	| npx toposimplify -f -s 1e-7 \
 	| npx topomerge states=cdistricts -k 'd.id.slice(0,2)' \
 	| npx topomerge nation=states \
-	| node ${SCR_DIR}/condist_properties.js ${SHP_DIR}/${st_stub}.shp \
+	| node ${JVS_DIR}/condist_properties.js ${SHP_DIR}/${st_stub}.shp \
 	> ${GEO_DIR}/${cd_json}
 
 # states
