@@ -5,42 +5,59 @@ converting cartographic boundary shapefiles to lightweight topojson files.
 
 ## To run
 
-To build topojson files, run the following command inside this directory:
+To build all topojson files, run the following command inside the `scripts/bash`
+directory:
 
 ``` bash
-
-$ > ./batch YYYY YYYY 
+$ > cd ./scripts/bash
+$ scripts/bash> ./batch -s YYYY -e YYYY -r 500k, 5m, 20m 
 ```
-
-where the first `YYYY` is the starting year and the second `YYYY` is the ending
-year of the files you wish to build. For example,
+where 
 
 ``` bash
-$ > ./batch 2014 2023 
+[-s]       Survey year start
+[-e]       Survey year end (if blank, assumed same as start)
+[-r]       Resolution: 500k, 5m, 20m
 ```
 
-will build files for all years between 2014 and 2023, inclusive. The final
-topojson files will be saved in the `data/json` directory.
+For example,
+
+``` bash
+$ > ./batch -s 2014 -e 2023 -r 5m 
+```
+
+will build 5m resolution files for all years between 2014 and 2023, inclusive.
+You can build all resolutions by separating each resolution after the `-r` flag
+with commas:
+
+``` bash
+$ > ./batch -s 2020 -e 2021 -r 500k,5m,20m
+```
+
+If you leave out the `-e` flag, the script will build only the year after the
+`-s` flag. In all cases, final topojson files will be saved in the `data/json`
+directory.
 
 ## Boundaries
 
 This script builds the following boundary files for each year selected:
 
+- State
 - County
 - Congressional district
-- State
+
 
 Each file contains boundaries for its level as well as those above it. 
 
+- State levels:
+  - `state`
+  - `nation`
 - County levels:
   - `county`
   - `state`
   - `nation`
 - Congressional district levels:
   - `cdistrict`
-  - `state`
-  - `nation`
-- State levels:
   - `state`
   - `nation`
   
