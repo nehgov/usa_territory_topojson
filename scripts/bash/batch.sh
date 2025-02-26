@@ -20,7 +20,7 @@ usage()
 
  ARGUMENTS:
     [-s]       Survey year start
-    [-e]       Survye year end (if blank, assumed same as start)
+    [-e]       Survey year end (if blank, assumed same as start)
     [-r]       Resolution: 500k, 5m, 20m
 
  EXAMPLE:
