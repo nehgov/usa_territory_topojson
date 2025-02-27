@@ -1,16 +1,17 @@
 # Spatial 
 
 This repository contains JSON geographic data and the scripts necessary for
-converting cartographic boundary shapefiles to lightweight topojson files.
+converting cartographic boundary shapefiles to lightweight topojson files. The
+resulting topjson files are not projected.
 
-## To run
+## To build maps
 
 To build all topojson files, run the following command inside the `scripts/bash`
 directory:
 
 ``` bash
 $ > cd ./scripts/bash
-$ scripts/bash> ./batch -s YYYY -e YYYY -r 500k, 5m, 20m 
+$ > ./batch -s YYYY -e YYYY -r 500k, 5m, 20m 
 ```
 where 
 
@@ -38,7 +39,7 @@ If you leave out the `-e` flag, the script will build only the year after the
 `-s` flag. In all cases, final topojson files will be saved in the `data/json`
 directory.
 
-## Boundaries
+# Boundaries
 
 This script builds the following boundary files for each year selected:
 
@@ -61,11 +62,30 @@ Each file contains boundaries for its level as well as those above it.
   - `state`
   - `nation`
   
-## Checking maps
+# Projections
 
-If you would like to visualize the maps, start a local server in the root
-directory (see: npm local-web-server) and visit localhost page. From there, you
-can select the various maps via a dropdown menu.
+To project the topojson data files so that non-contiguous states and territories
+are moved for easier mapping, you will need to use the json scripts located in `assets/js`:
+
+- `d3.v7.min.js`
+- `topojson.min.js`
+- `geoalbersuster.js`
+
+The first two scripts are general libraries for working with D3 and topojson
+files. The third file contains the scripts necessary for projecting the maps with the key function:
+
+``` javascript
+const projection = geoAlbersUsaTerritories.geoAlbersUsaTerritories()
+  .scale(1280)
+  .translate([width / 2, height / 2]);
+const path = d3.geoPath().projection(projection);
+```
+  
+## Visualizing maps
+
+If you would like to visualize the projected maps, start a local server in the
+root directory (see: npm local-web-server) and visit localhost page. From there,
+you can select the various maps via a drop down menu.
 
 ``` bash
 $ > npm install local-web-server
@@ -74,3 +94,9 @@ $ > npx ws
 Paste `http://127.0.0.1:8000` in your browser.
 
 ![Check maps locally](./img/check_map.png)
+
+## Using maps in other projects
+
+The script section in `index.html` can be modified / reused in order to use
+these maps in other projects.
+
