@@ -204,42 +204,42 @@ export NODE_NO_WARNINGS=1
 # counties
 echo "  - Converting COUNTY shapefile to topojson"
 npx shp2json --encoding utf-8 -n ${SHP_DIR}/${ct_stub}.shp \
-	| npx ndjson-filter '!/000$/.test(d.properties.GEOID)' \
-	| npx ndjson-map '(d.id = d.properties.GEOID, delete d.properties, d)' \
-	> ${GEO_DIR}/county_tmp.json
+    | npx ndjson-filter '!/000$/.test(d.properties.GEOID)' \
+    | npx ndjson-map '(d.id = d.properties.GEOID, delete d.properties, d)' \
+    > ${GEO_DIR}/county_tmp.json
 
 npx geo2topo -q 1e5 -n counties=${GEO_DIR}/county_tmp.json \
-	| npx toposimplify -f -s 1e-7 \
-	| npx topomerge states=counties -k 'd.id.slice(0,2)' \
-	| npx topomerge nation=states \
-	| node ${JVS_DIR}/county_properties.js ${SHP_DIR}/${ct_stub}.shp ${SHP_DIR}/${st_stub}.shp \
-	> ${GEO_DIR}/${ct_json}
+    | npx toposimplify -f -s 1e-7 \
+    | npx topomerge states=counties -k 'd.id.slice(0,2)' \
+    | npx topomerge nation=states \
+    | node ${JVS_DIR}/county_properties.js ${SHP_DIR}/${ct_stub}.shp ${SHP_DIR}/${st_stub}.shp \
+    > ${GEO_DIR}/${ct_json}
 
 # congressional districts
 echo "  - Converting CONGRESSIONAL DISTRICT shapefile to topojson"
 npx shp2json --encoding utf-8 -n ${SHP_DIR}/${cd_stub}.shp \
-	| npx ndjson-filter '!/0000$/.test(d.properties.GEOID)' \
-	| npx ndjson-map '(d.id = d.properties.GEOID, delete d.properties, d)' \
-	> ${GEO_DIR}/cdistrict_tmp.json
+    | npx ndjson-filter '!/0000$/.test(d.properties.GEOID)' \
+    | npx ndjson-map '(d.id = d.properties.GEOID, delete d.properties, d)' \
+    > ${GEO_DIR}/cdistrict_tmp.json
 
 npx geo2topo -q 1e5 -n cdistricts=${GEO_DIR}/cdistrict_tmp.json \
-	| npx toposimplify -f -s 1e-7 \
-	| npx topomerge states=cdistricts -k 'd.id.slice(0,2)' \
-	| npx topomerge nation=states \
-	| node ${JVS_DIR}/condist_properties.js ${SHP_DIR}/${st_stub}.shp \
-	> ${GEO_DIR}/${cd_json}
+    | npx toposimplify -f -s 1e-7 \
+    | npx topomerge states=cdistricts -k 'd.id.slice(0,2)' \
+    | npx topomerge nation=states \
+    | node ${JVS_DIR}/condist_properties.js ${SHP_DIR}/${st_stub}.shp \
+    > ${GEO_DIR}/${cd_json}
 
 # states
 echo "  - Converting STATE shapefile to topojson"
 npx shp2json --encoding utf-8 -n ${SHP_DIR}/${st_stub}.shp \
-	| npx ndjson-filter '!/000$/.test(d.properties.GEOID)' \
-	| npx ndjson-map '(d.id = d.properties.GEOID, d.properties = {name: d.properties.NAME}, d)' \
-	> ${GEO_DIR}/state_tmp.json
+    | npx ndjson-filter '!/000$/.test(d.properties.GEOID)' \
+    | npx ndjson-map '(d.id = d.properties.GEOID, d.properties = {name: d.properties.NAME}, d)' \
+    > ${GEO_DIR}/state_tmp.json
 
 npx geo2topo -q 1e5 -n states=${GEO_DIR}/state_tmp.json \
-	| npx toposimplify -f -s 1e-7 \
-	| npx topomerge nation=states \
-	> ${GEO_DIR}/${st_json}
+    | npx toposimplify -f -s 1e-7 \
+    | npx topomerge nation=states \
+    > ${GEO_DIR}/${st_json}
 
 ## --- clean up ----------------------------------
 
