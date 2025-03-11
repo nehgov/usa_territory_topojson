@@ -21,19 +21,22 @@ usage()
  ARGUMENTS:
     [-y]       Survey year
     [-r]       Resolution: 500k, 5m, 20m
+    [-p]       Project (geoAlbersUsaTer)
 
  EXAMPLE:
 
  ./build -y 2022 -r 5m
  ./build -y 2020 -r 500k
+ ./build -y 2020 -r 5m -p
 
 EOF
 }
 
 y_flag=0
 r_flag=0
+p_flag=0
 
-while getopts "hy:r:" opt;
+while getopts "hy:r:p" opt;
 do
     case $opt in
     h)
@@ -47,6 +50,9 @@ do
     r)
         res=$OPTARG
         r_flag=1
+        ;;
+    p)
+        p_flag=1
         ;;
     \?)
         usage
@@ -103,15 +109,22 @@ cd_stub=cb_${yr}_us_cd${session}_${res}
 # outputs
 #
 # name of geographic level plus year: county_5m_2023.json
+# if projected: county_5m_2023_proj.json
 #
 # NB: the congressional districts will be redundant for multiple years, which
 # may be accounted in later code to reduce transferring multiple versions of the
 # same file (i.e., save bandwidth), but it's still good to have a file for each
 # year for consistency
-ct_json=county_${res}_${yr}.json
-st_json=state_${res}_${yr}.json
-cd_json=cdistrict_${res}_${yr}.json
 
+if (( $p_flag==1 )); then
+    ct_json=county_${res}_${yr}_proj.json
+    st_json=state_${res}_${yr}_proj.json
+    cd_json=cdistrict_${res}_${yr}_proj.json
+else
+    ct_json=county_${res}_${yr}.json
+    st_json=state_${res}_${yr}.json
+    cd_json=cdistrict_${res}_${yr}.json
+fi
 # --- clean up -----------------------------------
 
 # javascript functions in a bash environment don't always allow overwriting
@@ -120,7 +133,11 @@ cd_json=cdistrict_${res}_${yr}.json
 # and json subdirectories in the /data directory if they don't exist
 
 echo "  - Removing old topojson files"
-rm -f ${GEO_DIR}/*_${res}_${yr}.json
+if (( $p_flag==1)); then
+    rm -f ${GEO_DIR}/*_${res}_${yr}_proj.json
+else
+    rm -f ${GEO_DIR}/*_${res}_${yr}.json
+fi
 mkdir -p ${GEO_DIR} ${SHP_DIR}
 
 # --- download -----------------------------------
@@ -177,6 +194,7 @@ export NODE_NO_WARNINGS=1
 # - geo2topo (topojson-server)
 # - toposimplify (topojson-simplify)
 # - topomerge (topojson-client)
+# - geoproject (d3-geo-projection)
 #
 # these packages can be downloaded using
 #
@@ -188,10 +206,11 @@ export NODE_NO_WARNINGS=1
 #
 # PROCESS:
 #
-# 1) shp2json converts the shapefile to a newline geojson file, encoding to UTF-8
-# 2) filter to keep rows with the GEOID property
-# 3) move the geoid from properties to its own id and delete properties to reduce size
-# 4) save as *_tmp.json file (still geojson)
+# 0) shp2json converts the shapefile to a newline geojson file, encoding to UTF-8
+# 1) filter to keep rows with the GEOID property
+# 2) move the geoid from properties to its own id and delete properties to reduce size
+# 3) save as *_tmp.json file (still geojson)
+# 4) (option) preproject
 # 5) convert to topojson file, reducing via quantization (bigger number means
 #    larger file size but more detail), and naming smallest geographic unit
 # 6) simplify further
@@ -208,6 +227,12 @@ npx shp2json --encoding utf-8 -n ${SHP_DIR}/${ct_stub}.shp \
     | npx ndjson-map '(d.id = d.properties.GEOID, delete d.properties, d)' \
     > ${GEO_DIR}/county_tmp.json
 
+if (( $p_flag==1)); then
+    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories()' \
+        < ${GEO_DIR}/county_tmp.json > ${GEO_DIR}/county_tmpp.json
+    mv ${GEO_DIR}/county_tmpp.json ${GEO_DIR}/county_tmp.json
+fi
+
 npx geo2topo -q 1e5 -n counties=${GEO_DIR}/county_tmp.json \
     | npx toposimplify -f -s 1e-7 \
     | npx topomerge states=counties -k 'd.id.slice(0,2)' \
@@ -222,6 +247,12 @@ npx shp2json --encoding utf-8 -n ${SHP_DIR}/${cd_stub}.shp \
     | npx ndjson-map '(d.id = d.properties.GEOID, delete d.properties, d)' \
     > ${GEO_DIR}/cdistrict_tmp.json
 
+if (( $p_flag==1)); then
+    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories()' \
+        < ${GEO_DIR}/cdistrict_tmp.json > ${GEO_DIR}/cdistrict_tmpp.json
+    mv ${GEO_DIR}/cdistrict_tmpp.json ${GEO_DIR}/cdistrict_tmp.json
+fi
+
 npx geo2topo -q 1e5 -n cdistricts=${GEO_DIR}/cdistrict_tmp.json \
     | npx toposimplify -f -s 1e-7 \
     | npx topomerge states=cdistricts -k 'd.id.slice(0,2)' \
@@ -235,6 +266,12 @@ npx shp2json --encoding utf-8 -n ${SHP_DIR}/${st_stub}.shp \
     | npx ndjson-filter '!/000$/.test(d.properties.GEOID)' \
     | npx ndjson-map '(d.id = d.properties.GEOID, d.properties = {name: d.properties.NAME}, d)' \
     > ${GEO_DIR}/state_tmp.json
+
+if (( $p_flag==1)); then
+    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories()' \
+        < ${GEO_DIR}/state_tmp.json > ${GEO_DIR}/state_tmpp.json
+    mv ${GEO_DIR}/state_tmpp.json ${GEO_DIR}/state_tmp.json
+fi
 
 npx geo2topo -q 1e5 -n states=${GEO_DIR}/state_tmp.json \
     | npx toposimplify -f -s 1e-7 \

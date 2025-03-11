@@ -22,11 +22,13 @@ usage()
     [-s]       Survey year start
     [-e]       Survey year end (if blank, assumed same as start)
     [-r]       Resolution: 500k, 5m, 20m
+    [-p]       Project (geoAlbersUsaTer)
 
  EXAMPLE:
 
  ./batch -s 2021 -r 5m
- ./build -s 2020 -e 2021 -r 500k
+ ./batch -s 2020 -e 2021 -r 500k,5m
+ ./batch -s 2020 -e 2022 -r 5m -p
 
 EOF
 }
@@ -34,8 +36,9 @@ EOF
 s_flag=0
 e_flag=0
 r_flag=0
+p_flag=0
 
-while getopts "hs:e:r:" opt;
+while getopts "hs:e:r:p" opt;
 do
     case $opt in
     h)
@@ -55,6 +58,9 @@ do
         IFS=,
         res=($OPTARG)
         r_flag=1
+        ;;
+    p)
+        p_flag=1
         ;;
     \?)
         usage
@@ -80,8 +86,13 @@ for ((i=$start; i<=$end; i++));
 do
     for j in "${res[@]}";
     do
-        echo "Building year: ${i} at ${j} resolution"
-        ./build.sh -y ${i} -r ${j}
+        if (( $p_flag==1 )); then
+            echo "Building year: ${i} at ${j} resolution (projected)"
+            ./build.sh -y ${i} -r ${j} -p
+        else
+            echo "Building year: ${i} at ${j} resolution"
+            ./build.sh -y ${i} -r ${j}
+        fi
     done
 done
 
