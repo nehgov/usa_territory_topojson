@@ -235,7 +235,7 @@ npx shp2json --encoding utf-8 -n ${SHP_DIR}/${ct_stub}.shp \
     > ${GEO_DIR}/county_tmp.json
 
 if (( $p_flag==1)); then
-    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories().scale(1280)' \
+    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories()' \
         < ${GEO_DIR}/county_tmp.json > ${GEO_DIR}/county_tmpp.json
     mv ${GEO_DIR}/county_tmpp.json ${GEO_DIR}/county_tmp.json
 fi
@@ -255,7 +255,7 @@ npx shp2json --encoding utf-8 -n ${SHP_DIR}/${cd_stub}.shp \
     > ${GEO_DIR}/cdistrict_tmp.json
 
 if (( $p_flag==1)); then
-    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories().scale(1280)' \
+    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories()' \
         < ${GEO_DIR}/cdistrict_tmp.json > ${GEO_DIR}/cdistrict_tmpp.json
     mv ${GEO_DIR}/cdistrict_tmpp.json ${GEO_DIR}/cdistrict_tmp.json
 fi
@@ -275,7 +275,7 @@ npx shp2json --encoding utf-8 -n ${SHP_DIR}/${st_stub}.shp \
     > ${GEO_DIR}/state_tmp.json
 
 if (( $p_flag==1)); then
-    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories().scale(1280)' \
+    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories()' \
         < ${GEO_DIR}/state_tmp.json > ${GEO_DIR}/state_tmpp.json
     mv ${GEO_DIR}/state_tmpp.json ${GEO_DIR}/state_tmp.json
 fi
