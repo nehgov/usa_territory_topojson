@@ -68,11 +68,18 @@ if (( $y_flag==0 )) || (( $r_flag==0 )); then
     exit 1
 fi
 
+# set sub directory for output files
+if (( $p_flag==1 )); then
+    json_subdir=proj
+else
+    json_subdir=unproj
+fi
+
 # --- directories --------------------------------
 
 ROOT="../.."
 DAT_DIR=${ROOT}/data
-GEO_DIR=${DAT_DIR}/json
+GEO_DIR=${DAT_DIR}/json/${json_subdir}
 SHP_DIR=${DAT_DIR}/shp
 JVS_DIR=${ROOT}/js
 
@@ -228,7 +235,7 @@ npx shp2json --encoding utf-8 -n ${SHP_DIR}/${ct_stub}.shp \
     > ${GEO_DIR}/county_tmp.json
 
 if (( $p_flag==1)); then
-    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories()' \
+    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories().scale(1280)' \
         < ${GEO_DIR}/county_tmp.json > ${GEO_DIR}/county_tmpp.json
     mv ${GEO_DIR}/county_tmpp.json ${GEO_DIR}/county_tmp.json
 fi
@@ -248,7 +255,7 @@ npx shp2json --encoding utf-8 -n ${SHP_DIR}/${cd_stub}.shp \
     > ${GEO_DIR}/cdistrict_tmp.json
 
 if (( $p_flag==1)); then
-    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories()' \
+    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories().scale(1280)' \
         < ${GEO_DIR}/cdistrict_tmp.json > ${GEO_DIR}/cdistrict_tmpp.json
     mv ${GEO_DIR}/cdistrict_tmpp.json ${GEO_DIR}/cdistrict_tmp.json
 fi
@@ -268,7 +275,7 @@ npx shp2json --encoding utf-8 -n ${SHP_DIR}/${st_stub}.shp \
     > ${GEO_DIR}/state_tmp.json
 
 if (( $p_flag==1)); then
-    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories()' \
+    npx geoproject -n -r d3=geo-albers-usa-territories 'd3.geoAlbersUsaTerritories().scale(1280)' \
         < ${GEO_DIR}/state_tmp.json > ${GEO_DIR}/state_tmpp.json
     mv ${GEO_DIR}/state_tmpp.json ${GEO_DIR}/state_tmp.json
 fi
