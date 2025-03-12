@@ -168,10 +168,11 @@
                 height = +svg.attr("height");
           
           // map and projection
-          const projection = geoAlbersUsaTerritories.geoAlbersUsaTerritories()
-                .scale(1280)
-                .translate([width / 2, height / 2]);
-          const path = d3.geoPath().projection(projection);
+          // const projection = geoAlbersUsaTer.geoAlbersUsaTer()
+          //       .scale(1280)
+          //       .translate([width / 2, height / 2]);
+          // const path = d3.geoPath().projection(projection);
+          const path = d3.geoPath()
 
           // drop old so it doesn't just keep appending
           svg.selectAll("path").remove();

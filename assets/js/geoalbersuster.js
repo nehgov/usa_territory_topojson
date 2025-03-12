@@ -4,7 +4,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-geo')) :
   typeof define === 'function' && define.amd ? define(['exports', 'd3-geo'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.geoAlbersUsaTerritories = {}, global.d3));
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.geoAlbersUsaTer = {}, global.d3));
 }(this, (function (exports, d3Geo) { 'use strict';
 
   var epsilon = 0.000001;
@@ -32,7 +32,7 @@
     };
   }
 
-  function geoAlbersUsaTerritories() {
+  function geoAlbersUsaTer() {
     var cache,
       cacheStream,
       lower48 = d3Geo.geoAlbers(),
@@ -132,8 +132,8 @@
       alaska.scale(_ * 0.35);
       hawaii.scale(_);
       puertoRico.scale(_ * 1.5);
-      guamMariana.scale(_ * 1.5);
-      americanSamoa.scale(_ * 1.5);
+      guamMariana.scale(_ * 1.8);
+      americanSamoa.scale(_ * 2.5);
       return albersUsaTerritories.translate(lower48.translate());
     };
 
@@ -176,10 +176,10 @@
         .stream(pointStream);
 
       guamMarianaPoint = guamMariana
-        .translate([x - 0.415 * k, y + 0.14 * k])
+        .translate([x - 0.405 * k, y + 0.10 * k])
         .clipExtent([
-          [x - 0.45 * k, y + 0.05 * k],
-          [x - 0.39 * k, y + 0.21 * k],
+          [x - 0.45 * k, y + 0.00 * k],
+          [x - 0.38 * k, y + 0.21 * k],
         ])
         .stream(pointStream);
 
@@ -201,7 +201,7 @@
     return albersUsaTerritories.scale(1070);
   }
 
-  exports.geoAlbersUsaTerritories = geoAlbersUsaTerritories;
+  exports.geoAlbersUsaTer = geoAlbersUsaTer;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

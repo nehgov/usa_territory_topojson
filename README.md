@@ -93,7 +93,7 @@ $ > npx ws
 ```
 Paste `http://127.0.0.1:8000` in your browser.
 
-![Check maps locally](./img/check_map.png)
+![View maps locally](./img/check_map.png)
 
 ## Using maps in other projects
 
