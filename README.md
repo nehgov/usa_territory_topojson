@@ -3,6 +3,20 @@
 This repository contains JSON geographic data and the scripts necessary for
 converting cartographic boundary shapefiles to lightweight topojson files.
 
+## Dependencies
+
+In order to build the maps, you will need the following Javascript libraries:
+
+- shapefile
+- ndjson-cli
+- topojson-server
+- topojson-simplify
+- topojson-client
+- d3-geo-projection
+- geo-albers-usa-territories
+
+You can get them each through npm: `npm install <package>`
+
 ## To build maps
 
 To build all topojson files, run the following command inside the `scripts/bash`
@@ -112,4 +126,9 @@ Paste `http://127.0.0.1:8000` in your browser.
 
 The script section in `index.html` can be modified / reused in order to use
 these maps in other projects.
+
+# Acknowledgments
+
+- [Projection](https://github.com/stamen/geo-albers-usa-territories)
+- [Command line cartography](https://medium.com/@mbostock/command-line-cartography-part-1-897aa8f8ca2c)
 

@@ -204,6 +204,7 @@ export NODE_NO_WARNINGS=1
 # - toposimplify (topojson-simplify)
 # - topomerge (topojson-client)
 # - geoproject (d3-geo-projection)
+# - geo-albers-usa-territories
 #
 # these packages can be downloaded using
 #
