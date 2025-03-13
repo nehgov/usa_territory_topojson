@@ -1,8 +1,7 @@
 # Spatial 
 
 This repository contains JSON geographic data and the scripts necessary for
-converting cartographic boundary shapefiles to lightweight topojson files. The
-resulting topjson files are not projected.
+converting cartographic boundary shapefiles to lightweight topojson files.
 
 ## To build maps
 
@@ -11,7 +10,7 @@ directory:
 
 ``` bash
 $ > cd ./scripts/bash
-$ > ./batch -s YYYY -e YYYY -r 500k, 5m, 20m 
+$ > ./batch -s YYYY -e YYYY -r 500k,5m,20m 
 ```
 where 
 
@@ -19,6 +18,7 @@ where
 [-s]       Survey year start
 [-e]       Survey year end (if blank, assumed same as start)
 [-r]       Resolution: 500k, 5m, 20m
+[-p]       Project (AlbersUsaTerritories)
 ```
 
 For example,
@@ -27,17 +27,29 @@ For example,
 $ > ./batch -s 2014 -e 2023 -r 5m 
 ```
 
-will build 5m resolution files for all years between 2014 and 2023, inclusive.
-You can build all resolutions by separating each resolution after the `-r` flag
-with commas:
+will build unprojected 5m resolution files for all years between 2014 and 2023,
+inclusive. You can build all resolutions by separating each resolution after the
+`-r` flag with commas:
 
 ``` bash
 $ > ./batch -s 2020 -e 2021 -r 500k,5m,20m
 ```
 
 If you leave out the `-e` flag, the script will build only the year after the
-`-s` flag. In all cases, final topojson files will be saved in the `data/json`
-directory.
+`-s` flag.
+
+If you wish to pre-project the file using the [AlbersUsaTerritories
+projection](https://github.com/stamen/geo-albers-usa-territories),
+which can save the processing required to make projections at runtime (speed
+up), then add the `-p` flag:
+
+``` bash
+$ > ./batch -s 2020 -e 2021 -r 5m -p
+```
+
+In all cases, final topojson files will be saved in either the
+`data/json/unprojected` or `data/json/projected` directory as determined by the
+`-p` flag.
 
 # Boundaries
 
@@ -72,7 +84,8 @@ are moved for easier mapping, you will need to use the json scripts located in `
 - `geoalbersuster.js`
 
 The first two scripts are general libraries for working with D3 and topojson
-files. The third file contains the scripts necessary for projecting the maps with the key function:
+files. The third file contains the scripts necessary for projecting the
+unprojected maps with the key function:
 
 ``` javascript
 const projection = geoAlbersUsaTerritories.geoAlbersUsaTerritories()
