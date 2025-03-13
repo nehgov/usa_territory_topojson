@@ -1,11 +1,12 @@
-# Spatial 
+# USA states + territories from SHP to TOPOJSON 
 
 This repository contains JSON geographic data and the scripts necessary for
 converting cartographic boundary shapefiles to lightweight topojson files.
 
 ## Dependencies
 
-In order to build the maps, you will need the following Javascript libraries:
+In order to build the maps, you will need the following Javascript libraries
+installed on your machine:
 
 - shapefile
 - ndjson-cli
