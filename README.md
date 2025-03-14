@@ -151,7 +151,7 @@ these maps in other projects.
 - [Projection](https://github.com/stamen/geo-albers-usa-territories)
 - [Command line cartography](https://medium.com/@mbostock/command-line-cartography-part-1-897aa8f8ca2c)
 
-# Disclamer
+# Disclaimer
 
 This software is licensed under the CC0 license. It is provided "as is" without
 any warranty of any kind, either expressed, implied, or statutory, including,
