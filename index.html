@@ -1,247 +1,264 @@
 <!DOCTYPE html>
 
-<script src="./assets/js/d3.v7.min.js"></script>
-<script src="./assets/js/topojson.min.js"></script>
-<script src="./assets/js/geoalbersuster.js"></script>
+<head>
+  <script src="./assets/js/d3.v7.min.js"></script>
+  <script src="./assets/js/topojson.min.js"></script>
+  <script src="./assets/js/geoalbersuster.js"></script>
+  <style>
+    .toggle-button {
+        background-color: #eee;
+        border: 1px solid #ccc;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+    .toggle-button.active {
+        background-color: #4CAF50;
+        color: white;
+    }
+  </style>
+</head>
 
-<select id = "opts">
-  <optgroup label="Unprojected (projected on the fly)">
-    <optgroup label="Resolution: 500k">
-      <optgroup label="&nbsp;&nbsp;State">
-        <option value="state_500k_2014">State 2014 (500k)</option>
-        <option value="state_500k_2015">State 2015 (500k)</option>
-        <option value="state_500k_2016">State 2016 (500k)</option>
-        <option value="state_500k_2017">State 2017 (500k)</option>
-        <option value="state_500k_2018">State 2018 (500k)</option>
-        <option value="state_500k_2019">State 2019 (500k)</option>
-        <option value="state_500k_2020">State 2020 (500k)</option>
-        <option value="state_500k_2021">State 2021 (500k)</option>
-        <option value="state_500k_2022">State 2022 (500k)</option>
-        <option value="state_500k_2023">State 2023 (500k)</option>
-      </optgroup>
-      <optgroup label="&nbsp;&nbsp;County">
-        <option value="county_500k_2014">County 2014 (500k)</option>
-        <option value="county_500k_2015">County 2015 (500k)</option>
-        <option value="county_500k_2016">County 2016 (500k)</option>
-        <option value="county_500k_2017">County 2017 (500k)</option>
-        <option value="county_500k_2018">County 2018 (500k)</option>
-        <option value="county_500k_2019">County 2019 (500k)</option>
-        <option value="county_500k_2020">County 2020 (500k)</option>
-        <option value="county_500k_2021">County 2021 (500k)</option>
-        <option value="county_500k_2022">County 2022 (500k)</option>
-        <option value="county_500k_2023">County 2023 (500k)</option>
-      </optgroup>
-      <optgroup label="&nbsp;&nbsp;Congressional district">
-        <option value="cdistrict_500k_2014">Congressional District 2014 (500k)</option>
-        <option value="cdistrict_500k_2015">Congressional District 2015 (500k)</option>
-        <option value="cdistrict_500k_2016">Congressional District 2016 (500k)</option>
-        <option value="cdistrict_500k_2017">Congressional District 2017 (500k)</option>
-        <option value="cdistrict_500k_2018">Congressional District 2018 (500k)</option>
-        <option value="cdistrict_500k_2019">Congressional District 2019 (500k)</option>
-        <option value="cdistrict_500k_2020">Congressional District 2020 (500k)</option>
-        <option value="cdistrict_500k_2021">Congressional District 2021 (500k)</option>
-        <option value="cdistrict_500k_2022">Congressional District 2022 (500k)</option>
-        <option value="cdistrict_500k_2023">Congressional District 2023 (500k)</option>
-      </optgroup>
-    </optgroup>
-    <optgroup label="Resolution: 5m">
-      <optgroup label="&nbsp;&nbsp;State">
-        <option value="state_5m_2014">State 2014 (5m)</option>
-        <option value="state_5m_2015">State 2015 (5m)</option>
-        <option value="state_5m_2016">State 2016 (5m)</option>
-        <option value="state_5m_2017">State 2017 (5m)</option>
-        <option value="state_5m_2018">State 2018 (5m)</option>
-        <option value="state_5m_2019">State 2019 (5m)</option>
-        <option value="state_5m_2020">State 2020 (5m)</option>
-        <option value="state_5m_2021">State 2021 (5m)</option>
-        <option value="state_5m_2022">State 2022 (5m)</option>
-        <option value="state_5m_2023">State 2023 (5m)</option>
-      </optgroup>
-      <optgroup label="&nbsp;&nbsp;County">
-        <option value="county_5m_2014">County 2014 (5m)</option>
-        <option value="county_5m_2015">County 2015 (5m)</option>
-        <option value="county_5m_2016">County 2016 (5m)</option>
-        <option value="county_5m_2017">County 2017 (5m)</option>
-        <option value="county_5m_2018">County 2018 (5m)</option>
-        <option value="county_5m_2019">County 2019 (5m)</option>
-        <option value="county_5m_2020">County 2020 (5m)</option>
-        <option value="county_5m_2021">County 2021 (5m)</option>
-        <option value="county_5m_2022">County 2022 (5m)</option>
-        <option value="county_5m_2023">County 2023 (5m)</option>
-      </optgroup>
-      <optgroup label="&nbsp;&nbsp;Congressional district">
-        <option value="cdistrict_5m_2014">Congressional District 2014 (5m)</option>
-        <option value="cdistrict_5m_2015">Congressional District 2015 (5m)</option>
-        <option value="cdistrict_5m_2016">Congressional District 2016 (5m)</option>
-        <option value="cdistrict_5m_2017">Congressional District 2017 (5m)</option>
-        <option value="cdistrict_5m_2018">Congressional District 2018 (5m)</option>
-        <option value="cdistrict_5m_2019">Congressional District 2019 (5m)</option>
-        <option value="cdistrict_5m_2020">Congressional District 2020 (5m)</option>
-        <option value="cdistrict_5m_2021">Congressional District 2021 (5m)</option>
-        <option value="cdistrict_5m_2022">Congressional District 2022 (5m)</option>
-        <option value="cdistrict_5m_2023">Congressional District 2023 (5m)</option>
-      </optgroup>
-    </optgroup>
-    <optgroup label="Resolution: 20m">
-      <optgroup label="&nbsp;&nbsp;State">
-        <option value="state_20m_2014">State 2014 (20m)</option>
-        <option value="state_20m_2015">State 2015 (20m)</option>
-        <option value="state_20m_2016">State 2016 (20m)</option>
-        <option value="state_20m_2017">State 2017 (20m)</option>
-        <option value="state_20m_2018">State 2018 (20m)</option>
-        <option value="state_20m_2019">State 2019 (20m)</option>
-        <option value="state_20m_2020">State 2020 (20m)</option>
-        <option value="state_20m_2021">State 2021 (20m)</option>
-        <option value="state_20m_2022">State 2022 (20m)</option>
-        <option value="state_20m_2023">State 2023 (20m)</option>
-      </optgroup>
-      <optgroup label="&nbsp;&nbsp;County">
-        <option value="county_20m_2014">County 2014 (20m)</option>
-        <option value="county_20m_2015">County 2015 (20m)</option>
-        <option value="county_20m_2016">County 2016 (20m)</option>
-        <option value="county_20m_2017">County 2017 (20m)</option>
-        <option value="county_20m_2018">County 2018 (20m)</option>
-        <option value="county_20m_2019">County 2019 (20m)</option>
-        <option value="county_20m_2020">County 2020 (20m)</option>
-        <option value="county_20m_2021">County 2021 (20m)</option>
-        <option value="county_20m_2022">County 2022 (20m)</option>
-        <option value="county_20m_2023">County 2023 (20m)</option>
-      </optgroup>
-      <optgroup label="&nbsp;&nbsp;Congressional district">
-        <option value="cdistrict_20m_2014">Congressional District 2014 (20m)</option>
-        <option value="cdistrict_20m_2015">Congressional District 2015 (20m)</option>
-        <option value="cdistrict_20m_2016">Congressional District 2016 (20m)</option>
-        <option value="cdistrict_20m_2017">Congressional District 2017 (20m)</option>
-        <option value="cdistrict_20m_2018">Congressional District 2018 (20m)</option>
-        <option value="cdistrict_20m_2019">Congressional District 2019 (20m)</option>
-        <option value="cdistrict_20m_2020">Congressional District 2020 (20m)</option>
-        <option value="cdistrict_20m_2021">Congressional District 2021 (20m)</option>
-        <option value="cdistrict_20m_2022">Congressional District 2022 (20m)</option>
-        <option value="cdistrict_20m_2023">Congressional District 2023 (20m)</option>
-      </optgroup>
-    </optgroup>
-  </optgroup>
-  <optgroup label="Projected">
-    <optgroup label="Resolution: 500k">
-      <optgroup label="&nbsp;&nbsp;State">
-        <option value="state_500k_2014_proj">State 2014 (500k)</option>
-        <option value="state_500k_2015_proj">State 2015 (500k)</option>
-        <option value="state_500k_2016_proj">State 2016 (500k)</option>
-        <option value="state_500k_2017_proj">State 2017 (500k)</option>
-        <option value="state_500k_2018_proj">State 2018 (500k)</option>
-        <option value="state_500k_2019_proj">State 2019 (500k)</option>
-        <option value="state_500k_2020_proj">State 2020 (500k)</option>
-        <option value="state_500k_2021_proj">State 2021 (500k)</option>
-        <option value="state_500k_2022_proj">State 2022 (500k)</option>
-        <option value="state_500k_2023_proj">State 2023 (500k)</option>
-      </optgroup>
-      <optgroup label="&nbsp;&nbsp;County">
-        <option value="county_500k_2014_proj">County 2014 (500k)</option>
-        <option value="county_500k_2015_proj">County 2015 (500k)</option>
-        <option value="county_500k_2016_proj">County 2016 (500k)</option>
-        <option value="county_500k_2017_proj">County 2017 (500k)</option>
-        <option value="county_500k_2018_proj">County 2018 (500k)</option>
-        <option value="county_500k_2019_proj">County 2019 (500k)</option>
-        <option value="county_500k_2020_proj">County 2020 (500k)</option>
-        <option value="county_500k_2021_proj">County 2021 (500k)</option>
-        <option value="county_500k_2022_proj">County 2022 (500k)</option>
-        <option value="county_500k_2023_proj">County 2023 (500k)</option>
-      </optgroup>
-      <optgroup label="&nbsp;&nbsp;Congressional district">
-        <option value="cdistrict_500k_2014_proj">Congressional District 2014 (500k)</option>
-        <option value="cdistrict_500k_2015_proj">Congressional District 2015 (500k)</option>
-        <option value="cdistrict_500k_2016_proj">Congressional District 2016 (500k)</option>
-        <option value="cdistrict_500k_2017_proj">Congressional District 2017 (500k)</option>
-        <option value="cdistrict_500k_2018_proj">Congressional District 2018 (500k)</option>
-        <option value="cdistrict_500k_2019_proj">Congressional District 2019 (500k)</option>
-        <option value="cdistrict_500k_2020_proj">Congressional District 2020 (500k)</option>
-        <option value="cdistrict_500k_2021_proj">Congressional District 2021 (500k)</option>
-        <option value="cdistrict_500k_2022_proj">Congressional District 2022 (500k)</option>
-        <option value="cdistrict_500k_2023_proj">Congressional District 2023 (500k)</option>
-      </optgroup>
-    </optgroup>
-    <optgroup label="Resolution: 5m">
-      <optgroup label="&nbsp;&nbsp;State">
-        <option value="state_5m_2014_proj">State 2014 (5m)</option>
-        <option value="state_5m_2015_proj">State 2015 (5m)</option>
-        <option value="state_5m_2016_proj">State 2016 (5m)</option>
-        <option value="state_5m_2017_proj">State 2017 (5m)</option>
-        <option value="state_5m_2018_proj">State 2018 (5m)</option>
-        <option value="state_5m_2019_proj">State 2019 (5m)</option>
-        <option value="state_5m_2020_proj">State 2020 (5m)</option>
-        <option value="state_5m_2021_proj">State 2021 (5m)</option>
-        <option value="state_5m_2022_proj">State 2022 (5m)</option>
-        <option value="state_5m_2023_proj">State 2023 (5m)</option>
-      </optgroup>
-      <optgroup label="&nbsp;&nbsp;County">
-        <option value="county_5m_2014_proj">County 2014 (5m)</option>
-        <option value="county_5m_2015_proj">County 2015 (5m)</option>
-        <option value="county_5m_2016_proj">County 2016 (5m)</option>
-        <option value="county_5m_2017_proj">County 2017 (5m)</option>
-        <option value="county_5m_2018_proj">County 2018 (5m)</option>
-        <option value="county_5m_2019_proj">County 2019 (5m)</option>
-        <option value="county_5m_2020_proj">County 2020 (5m)</option>
-        <option value="county_5m_2021_proj">County 2021 (5m)</option>
-        <option value="county_5m_2022_proj">County 2022 (5m)</option>
-        <option value="county_5m_2023_proj">County 2023 (5m)</option>
-      </optgroup>
-      <optgroup label="&nbsp;&nbsp;Congressional district">
-        <option value="cdistrict_5m_2014_proj">Congressional District 2014 (5m)</option>
-        <option value="cdistrict_5m_2015_proj">Congressional District 2015 (5m)</option>
-        <option value="cdistrict_5m_2016_proj">Congressional District 2016 (5m)</option>
-        <option value="cdistrict_5m_2017_proj">Congressional District 2017 (5m)</option>
-        <option value="cdistrict_5m_2018_proj">Congressional District 2018 (5m)</option>
-        <option value="cdistrict_5m_2019_proj">Congressional District 2019 (5m)</option>
-        <option value="cdistrict_5m_2020_proj">Congressional District 2020 (5m)</option>
-        <option value="cdistrict_5m_2021_proj">Congressional District 2021 (5m)</option>
-        <option value="cdistrict_5m_2022_proj">Congressional District 2022 (5m)</option>
-        <option value="cdistrict_5m_2023_proj">Congressional District 2023 (5m)</option>
-      </optgroup>
-    </optgroup>
-    <optgroup label="Resolution: 20m">
-      <optgroup label="&nbsp;&nbsp;State">
-        <option value="state_20m_2014_proj">State 2014 (20m)</option>
-        <option value="state_20m_2015_proj">State 2015 (20m)</option>
-        <option value="state_20m_2016_proj">State 2016 (20m)</option>
-        <option value="state_20m_2017_proj">State 2017 (20m)</option>
-        <option value="state_20m_2018_proj">State 2018 (20m)</option>
-        <option value="state_20m_2019_proj">State 2019 (20m)</option>
-        <option value="state_20m_2020_proj">State 2020 (20m)</option>
-        <option value="state_20m_2021_proj">State 2021 (20m)</option>
-        <option value="state_20m_2022_proj">State 2022 (20m)</option>
-        <option value="state_20m_2023_proj">State 2023 (20m)</option>
-      </optgroup>
-      <optgroup label="&nbsp;&nbsp;County">
-        <option value="county_20m_2014_proj">County 2014 (20m)</option>
-        <option value="county_20m_2015_proj">County 2015 (20m)</option>
-        <option value="county_20m_2016_proj">County 2016 (20m)</option>
-        <option value="county_20m_2017_proj">County 2017 (20m)</option>
-        <option value="county_20m_2018_proj">County 2018 (20m)</option>
-        <option value="county_20m_2019_proj">County 2019 (20m)</option>
-        <option value="county_20m_2020_proj">County 2020 (20m)</option>
-        <option value="county_20m_2021_proj">County 2021 (20m)</option>
-        <option value="county_20m_2022_proj">County 2022 (20m)</option>
-        <option value="county_20m_2023_proj">County 2023 (20m)</option>
-      </optgroup>
-      <optgroup label="&nbsp;&nbsp;Congressional district">
-        <option value="cdistrict_20m_2014_proj">Congressional District 2014 (20m)</option>
-        <option value="cdistrict_20m_2015_proj">Congressional District 2015 (20m)</option>
-        <option value="cdistrict_20m_2016_proj">Congressional District 2016 (20m)</option>
-        <option value="cdistrict_20m_2017_proj">Congressional District 2017 (20m)</option>
-        <option value="cdistrict_20m_2018_proj">Congressional District 2018 (20m)</option>
-        <option value="cdistrict_20m_2019_proj">Congressional District 2019 (20m)</option>
-        <option value="cdistrict_20m_2020_proj">Congressional District 2020 (20m)</option>
-        <option value="cdistrict_20m_2021_proj">Congressional District 2021 (20m)</option>
-        <option value="cdistrict_20m_2022_proj">Congressional District 2022 (20m)</option>
-        <option value="cdistrict_20m_2023_proj">Congressional District 2023 (20m)</option>
-      </optgroup>
-    </optgroup>
-  </optgroup>
-</select>
+<body>
+  <div>
+    <svg id="map" width = "1280" height = "800"></svg>
+  </div>
 
-<svg id="map" width = "1280" height = "800"></svg>
-
-<div id="note"></div>
+  <select id = "opts">
+    <optgroup label="Unprojected (projected on the fly)">
+      <optgroup label="&nbsp;Resolution: 500k">
+        <optgroup label="&nbsp;&nbsp;State">
+          <option value="state_500k_2014">State 2014 (500k; projected on-the-fly)</option>
+          <option value="state_500k_2015">State 2015 (500k; projected on-the-fly)</option>
+          <option value="state_500k_2016">State 2016 (500k; projected on-the-fly)</option>
+          <option value="state_500k_2017">State 2017 (500k; projected on-the-fly)</option>
+          <option value="state_500k_2018">State 2018 (500k; projected on-the-fly)</option>
+          <option value="state_500k_2019">State 2019 (500k; projected on-the-fly)</option>
+          <option value="state_500k_2020">State 2020 (500k; projected on-the-fly)</option>
+          <option value="state_500k_2021">State 2021 (500k; projected on-the-fly)</option>
+          <option value="state_500k_2022">State 2022 (500k; projected on-the-fly)</option>
+          <option value="state_500k_2023">State 2023 (500k; projected on-the-fly)</option>
+        </optgroup>
+        <optgroup label="&nbsp;&nbsp;County">
+          <option value="county_500k_2014">County 2014 (500k; projected on-the-fly)</option>
+          <option value="county_500k_2015">County 2015 (500k; projected on-the-fly)</option>
+          <option value="county_500k_2016">County 2016 (500k; projected on-the-fly)</option>
+          <option value="county_500k_2017">County 2017 (500k; projected on-the-fly)</option>
+          <option value="county_500k_2018">County 2018 (500k; projected on-the-fly)</option>
+          <option value="county_500k_2019">County 2019 (500k; projected on-the-fly)</option>
+          <option value="county_500k_2020">County 2020 (500k; projected on-the-fly)</option>
+          <option value="county_500k_2021">County 2021 (500k; projected on-the-fly)</option>
+          <option value="county_500k_2022">County 2022 (500k; projected on-the-fly)</option>
+          <option value="county_500k_2023">County 2023 (500k; projected on-the-fly)</option>
+        </optgroup>
+        <optgroup label="&nbsp;&nbsp;Congressional district">
+          <option value="cdistrict_500k_2014">Congressional District 2014 (500k; projected on-the-fly)</option>
+          <option value="cdistrict_500k_2015">Congressional District 2015 (500k; projected on-the-fly)</option>
+          <option value="cdistrict_500k_2016">Congressional District 2016 (500k; projected on-the-fly)</option>
+          <option value="cdistrict_500k_2017">Congressional District 2017 (500k; projected on-the-fly)</option>
+          <option value="cdistrict_500k_2018">Congressional District 2018 (500k; projected on-the-fly)</option>
+          <option value="cdistrict_500k_2019">Congressional District 2019 (500k; projected on-the-fly)</option>
+          <option value="cdistrict_500k_2020">Congressional District 2020 (500k; projected on-the-fly)</option>
+          <option value="cdistrict_500k_2021">Congressional District 2021 (500k; projected on-the-fly)</option>
+          <option value="cdistrict_500k_2022">Congressional District 2022 (500k; projected on-the-fly)</option>
+          <option value="cdistrict_500k_2023">Congressional District 2023 (500k; projected on-the-fly)</option>
+        </optgroup>
+      </optgroup>
+      <optgroup label="&nbsp;Resolution: 5m">
+        <optgroup label="&nbsp;&nbsp;State">
+          <option value="state_5m_2014">State 2014 (5m; projected on-the-fly)</option>
+          <option value="state_5m_2015">State 2015 (5m; projected on-the-fly)</option>
+          <option value="state_5m_2016">State 2016 (5m; projected on-the-fly)</option>
+          <option value="state_5m_2017">State 2017 (5m; projected on-the-fly)</option>
+          <option value="state_5m_2018">State 2018 (5m; projected on-the-fly)</option>
+          <option value="state_5m_2019">State 2019 (5m; projected on-the-fly)</option>
+          <option value="state_5m_2020">State 2020 (5m; projected on-the-fly)</option>
+          <option value="state_5m_2021">State 2021 (5m; projected on-the-fly)</option>
+          <option value="state_5m_2022">State 2022 (5m; projected on-the-fly)</option>
+          <option value="state_5m_2023">State 2023 (5m; projected on-the-fly)</option>
+        </optgroup>
+        <optgroup label="&nbsp;&nbsp;County">
+          <option value="county_5m_2014">County 2014 (5m; projected on-the-fly)</option>
+          <option value="county_5m_2015">County 2015 (5m; projected on-the-fly)</option>
+          <option value="county_5m_2016">County 2016 (5m; projected on-the-fly)</option>
+          <option value="county_5m_2017">County 2017 (5m; projected on-the-fly)</option>
+          <option value="county_5m_2018">County 2018 (5m; projected on-the-fly)</option>
+          <option value="county_5m_2019">County 2019 (5m; projected on-the-fly)</option>
+          <option value="county_5m_2020">County 2020 (5m; projected on-the-fly)</option>
+          <option value="county_5m_2021">County 2021 (5m; projected on-the-fly)</option>
+          <option value="county_5m_2022">County 2022 (5m; projected on-the-fly)</option>
+          <option value="county_5m_2023">County 2023 (5m; projected on-the-fly)</option>
+        </optgroup>
+        <optgroup label="&nbsp;&nbsp;Congressional district">
+          <option value="cdistrict_5m_2014">Congressional District 2014 (5m; projected on-the-fly)</option>
+          <option value="cdistrict_5m_2015">Congressional District 2015 (5m; projected on-the-fly)</option>
+          <option value="cdistrict_5m_2016">Congressional District 2016 (5m; projected on-the-fly)</option>
+          <option value="cdistrict_5m_2017">Congressional District 2017 (5m; projected on-the-fly)</option>
+          <option value="cdistrict_5m_2018">Congressional District 2018 (5m; projected on-the-fly)</option>
+          <option value="cdistrict_5m_2019">Congressional District 2019 (5m; projected on-the-fly)</option>
+          <option value="cdistrict_5m_2020">Congressional District 2020 (5m; projected on-the-fly)</option>
+          <option value="cdistrict_5m_2021">Congressional District 2021 (5m; projected on-the-fly)</option>
+          <option value="cdistrict_5m_2022">Congressional District 2022 (5m; projected on-the-fly)</option>
+          <option value="cdistrict_5m_2023">Congressional District 2023 (5m; projected on-the-fly)</option>
+        </optgroup>
+      </optgroup>
+      <optgroup label="&nbsp;Resolution: 20m">
+        <optgroup label="&nbsp;&nbsp;State">
+          <option value="state_20m_2014">State 2014 (20m; projected on-the-fly)</option>
+          <option value="state_20m_2015">State 2015 (20m; projected on-the-fly)</option>
+          <option value="state_20m_2016">State 2016 (20m; projected on-the-fly)</option>
+          <option value="state_20m_2017">State 2017 (20m; projected on-the-fly)</option>
+          <option value="state_20m_2018">State 2018 (20m; projected on-the-fly)</option>
+          <option value="state_20m_2019">State 2019 (20m; projected on-the-fly)</option>
+          <option value="state_20m_2020">State 2020 (20m; projected on-the-fly)</option>
+          <option value="state_20m_2021">State 2021 (20m; projected on-the-fly)</option>
+          <option value="state_20m_2022">State 2022 (20m; projected on-the-fly)</option>
+          <option value="state_20m_2023">State 2023 (20m; projected on-the-fly)</option>
+        </optgroup>
+        <optgroup label="&nbsp;&nbsp;County">
+          <option value="county_20m_2014">County 2014 (20m; projected on-the-fly)</option>
+          <option value="county_20m_2015">County 2015 (20m; projected on-the-fly)</option>
+          <option value="county_20m_2016">County 2016 (20m; projected on-the-fly)</option>
+          <option value="county_20m_2017">County 2017 (20m; projected on-the-fly)</option>
+          <option value="county_20m_2018">County 2018 (20m; projected on-the-fly)</option>
+          <option value="county_20m_2019">County 2019 (20m; projected on-the-fly)</option>
+          <option value="county_20m_2020">County 2020 (20m; projected on-the-fly)</option>
+          <option value="county_20m_2021">County 2021 (20m; projected on-the-fly)</option>
+          <option value="county_20m_2022">County 2022 (20m; projected on-the-fly)</option>
+          <option value="county_20m_2023">County 2023 (20m; projected on-the-fly)</option>
+        </optgroup>
+        <optgroup label="&nbsp;&nbsp;Congressional district">
+          <option value="cdistrict_20m_2014">Congressional District 2014 (20m; projected on-the-fly)</option>
+          <option value="cdistrict_20m_2015">Congressional District 2015 (20m; projected on-the-fly)</option>
+          <option value="cdistrict_20m_2016">Congressional District 2016 (20m; projected on-the-fly)</option>
+          <option value="cdistrict_20m_2017">Congressional District 2017 (20m; projected on-the-fly)</option>
+          <option value="cdistrict_20m_2018">Congressional District 2018 (20m; projected on-the-fly)</option>
+          <option value="cdistrict_20m_2019">Congressional District 2019 (20m; projected on-the-fly)</option>
+          <option value="cdistrict_20m_2020">Congressional District 2020 (20m; projected on-the-fly)</option>
+          <option value="cdistrict_20m_2021">Congressional District 2021 (20m; projected on-the-fly)</option>
+          <option value="cdistrict_20m_2022">Congressional District 2022 (20m; projected on-the-fly)</option>
+          <option value="cdistrict_20m_2023">Congressional District 2023 (20m; projected on-the-fly)</option>
+        </optgroup>
+      </optgroup>
+    </optgroup>
+    <optgroup label="Projected">
+      <optgroup label="&nbsp;Resolution: 500k">
+        <optgroup label="&nbsp;&nbsp;State">
+          <option value="state_500k_2014_proj">State 2014 (500k; pre-projected)</option>
+          <option value="state_500k_2015_proj">State 2015 (500k; pre-projected)</option>
+          <option value="state_500k_2016_proj">State 2016 (500k; pre-projected)</option>
+          <option value="state_500k_2017_proj">State 2017 (500k; pre-projected)</option>
+          <option value="state_500k_2018_proj">State 2018 (500k; pre-projected)</option>
+          <option value="state_500k_2019_proj">State 2019 (500k; pre-projected)</option>
+          <option value="state_500k_2020_proj">State 2020 (500k; pre-projected)</option>
+          <option value="state_500k_2021_proj">State 2021 (500k; pre-projected)</option>
+          <option value="state_500k_2022_proj">State 2022 (500k; pre-projected)</option>
+          <option value="state_500k_2023_proj">State 2023 (500k; pre-projected)</option>
+        </optgroup>
+        <optgroup label="&nbsp;&nbsp;County">
+          <option value="county_500k_2014_proj">County 2014 (500k; pre-projected)</option>
+          <option value="county_500k_2015_proj">County 2015 (500k; pre-projected)</option>
+          <option value="county_500k_2016_proj">County 2016 (500k; pre-projected)</option>
+          <option value="county_500k_2017_proj">County 2017 (500k; pre-projected)</option>
+          <option value="county_500k_2018_proj">County 2018 (500k; pre-projected)</option>
+          <option value="county_500k_2019_proj">County 2019 (500k; pre-projected)</option>
+          <option value="county_500k_2020_proj">County 2020 (500k; pre-projected)</option>
+          <option value="county_500k_2021_proj">County 2021 (500k; pre-projected)</option>
+          <option value="county_500k_2022_proj">County 2022 (500k; pre-projected)</option>
+          <option value="county_500k_2023_proj">County 2023 (500k; pre-projected)</option>
+        </optgroup>
+        <optgroup label="&nbsp;&nbsp;Congressional district">
+          <option value="cdistrict_500k_2014_proj">Congressional District 2014 (500k; pre-projected)</option>
+          <option value="cdistrict_500k_2015_proj">Congressional District 2015 (500k; pre-projected)</option>
+          <option value="cdistrict_500k_2016_proj">Congressional District 2016 (500k; pre-projected)</option>
+          <option value="cdistrict_500k_2017_proj">Congressional District 2017 (500k; pre-projected)</option>
+          <option value="cdistrict_500k_2018_proj">Congressional District 2018 (500k; pre-projected)</option>
+          <option value="cdistrict_500k_2019_proj">Congressional District 2019 (500k; pre-projected)</option>
+          <option value="cdistrict_500k_2020_proj">Congressional District 2020 (500k; pre-projected)</option>
+          <option value="cdistrict_500k_2021_proj">Congressional District 2021 (500k; pre-projected)</option>
+          <option value="cdistrict_500k_2022_proj">Congressional District 2022 (500k; pre-projected)</option>
+          <option value="cdistrict_500k_2023_proj">Congressional District 2023 (500k; pre-projected)</option>
+        </optgroup>
+      </optgroup>
+      <optgroup label="&nbsp;Resolution: 5m">
+        <optgroup label="&nbsp;&nbsp;State">
+          <option value="state_5m_2014_proj">State 2014 (5m; pre-projected)</option>
+          <option value="state_5m_2015_proj">State 2015 (5m; pre-projected)</option>
+          <option value="state_5m_2016_proj">State 2016 (5m; pre-projected)</option>
+          <option value="state_5m_2017_proj">State 2017 (5m; pre-projected)</option>
+          <option value="state_5m_2018_proj">State 2018 (5m; pre-projected)</option>
+          <option value="state_5m_2019_proj">State 2019 (5m; pre-projected)</option>
+          <option value="state_5m_2020_proj">State 2020 (5m; pre-projected)</option>
+          <option value="state_5m_2021_proj">State 2021 (5m; pre-projected)</option>
+          <option value="state_5m_2022_proj">State 2022 (5m; pre-projected)</option>
+          <option value="state_5m_2023_proj">State 2023 (5m; pre-projected)</option>
+        </optgroup>
+        <optgroup label="&nbsp;&nbsp;County">
+          <option value="county_5m_2014_proj">County 2014 (5m; pre-projected)</option>
+          <option value="county_5m_2015_proj">County 2015 (5m; pre-projected)</option>
+          <option value="county_5m_2016_proj">County 2016 (5m; pre-projected)</option>
+          <option value="county_5m_2017_proj">County 2017 (5m; pre-projected)</option>
+          <option value="county_5m_2018_proj">County 2018 (5m; pre-projected)</option>
+          <option value="county_5m_2019_proj">County 2019 (5m; pre-projected)</option>
+          <option value="county_5m_2020_proj">County 2020 (5m; pre-projected)</option>
+          <option value="county_5m_2021_proj">County 2021 (5m; pre-projected)</option>
+          <option value="county_5m_2022_proj">County 2022 (5m; pre-projected)</option>
+          <option value="county_5m_2023_proj">County 2023 (5m; pre-projected)</option>
+        </optgroup>
+        <optgroup label="&nbsp;&nbsp;Congressional district">
+          <option value="cdistrict_5m_2014_proj">Congressional District 2014 (5m; pre-projected)</option>
+          <option value="cdistrict_5m_2015_proj">Congressional District 2015 (5m; pre-projected)</option>
+          <option value="cdistrict_5m_2016_proj">Congressional District 2016 (5m; pre-projected)</option>
+          <option value="cdistrict_5m_2017_proj">Congressional District 2017 (5m; pre-projected)</option>
+          <option value="cdistrict_5m_2018_proj">Congressional District 2018 (5m; pre-projected)</option>
+          <option value="cdistrict_5m_2019_proj">Congressional District 2019 (5m; pre-projected)</option>
+          <option value="cdistrict_5m_2020_proj">Congressional District 2020 (5m; pre-projected)</option>
+          <option value="cdistrict_5m_2021_proj">Congressional District 2021 (5m; pre-projected)</option>
+          <option value="cdistrict_5m_2022_proj">Congressional District 2022 (5m; pre-projected)</option>
+          <option value="cdistrict_5m_2023_proj">Congressional District 2023 (5m; pre-projected)</option>
+        </optgroup>
+      </optgroup>
+      <optgroup label="&nbsp;Resolution: 20m">
+        <optgroup label="&nbsp;&nbsp;State">
+          <option value="state_20m_2014_proj">State 2014 (20m; pre-projected)</option>
+          <option value="state_20m_2015_proj">State 2015 (20m; pre-projected)</option>
+          <option value="state_20m_2016_proj">State 2016 (20m; pre-projected)</option>
+          <option value="state_20m_2017_proj">State 2017 (20m; pre-projected)</option>
+          <option value="state_20m_2018_proj">State 2018 (20m; pre-projected)</option>
+          <option value="state_20m_2019_proj">State 2019 (20m; pre-projected)</option>
+          <option value="state_20m_2020_proj">State 2020 (20m; pre-projected)</option>
+          <option value="state_20m_2021_proj">State 2021 (20m; pre-projected)</option>
+          <option value="state_20m_2022_proj">State 2022 (20m; pre-projected)</option>
+          <option value="state_20m_2023_proj">State 2023 (20m; pre-projected)</option>
+        </optgroup>
+        <optgroup label="&nbsp;&nbsp;County">
+          <option value="county_20m_2014_proj">County 2014 (20m; pre-projected)</option>
+          <option value="county_20m_2015_proj">County 2015 (20m; pre-projected)</option>
+          <option value="county_20m_2016_proj">County 2016 (20m; pre-projected)</option>
+          <option value="county_20m_2017_proj">County 2017 (20m; pre-projected)</option>
+          <option value="county_20m_2018_proj">County 2018 (20m; pre-projected)</option>
+          <option value="county_20m_2019_proj">County 2019 (20m; pre-projected)</option>
+          <option value="county_20m_2020_proj">County 2020 (20m; pre-projected)</option>
+          <option value="county_20m_2021_proj">County 2021 (20m; pre-projected)</option>
+          <option value="county_20m_2022_proj">County 2022 (20m; pre-projected)</option>
+          <option value="county_20m_2023_proj">County 2023 (20m; pre-projected)</option>
+        </optgroup>
+        <optgroup label="&nbsp;&nbsp;Congressional district">
+          <option value="cdistrict_20m_2014_proj">Congressional District 2014 (20m; pre-projected)</option>
+          <option value="cdistrict_20m_2015_proj">Congressional District 2015 (20m; pre-projected)</option>
+          <option value="cdistrict_20m_2016_proj">Congressional District 2016 (20m; pre-projected)</option>
+          <option value="cdistrict_20m_2017_proj">Congressional District 2017 (20m; pre-projected)</option>
+          <option value="cdistrict_20m_2018_proj">Congressional District 2018 (20m; pre-projected)</option>
+          <option value="cdistrict_20m_2019_proj">Congressional District 2019 (20m; pre-projected)</option>
+          <option value="cdistrict_20m_2020_proj">Congressional District 2020 (20m; pre-projected)</option>
+          <option value="cdistrict_20m_2021_proj">Congressional District 2021 (20m; pre-projected)</option>
+          <option value="cdistrict_20m_2022_proj">Congressional District 2022 (20m; pre-projected)</option>
+          <option value="cdistrict_20m_2023_proj">Congressional District 2023 (20m; pre-projected)</option>
+        </optgroup>
+      </optgroup>
+    </optgroup>
+  </select>
+  <div id="note"></div>
+</body>
 
 <script>
   let testString = function(x) {
@@ -272,7 +289,9 @@
   }
   let loadData = function(datastr) {
 
+      // set path: projected ? use /proj : use /unproj
       const datpath = datastr.match("proj") ? "./data/json/proj/" : "./data/json/unproj/"
+
       // load data and run
       Promise.all([
           d3.json(datpath + datastr + ".json")

@@ -1,8 +1,24 @@
 # USA states + territories from SHP to TOPOJSON 
 
-This repository contains JSON geographic data and the scripts necessary for
-converting cartographic boundary shapefiles to lightweight topojson files.
+This repository contains scripts that will convert [US Census cartographic
+  boundary](https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html)
+  shapefiles to lightweight topojson files, which include all 50 states, the
+  District of Columbia, and five permanently inhabited territories: American
+  Samoa, Guam, Northern Mariana Islands, Puerto Rico, and the U.S. Virgin
+  Islands. 
+  
+Pre-built topojson files for the years 2014 to 2023 are contained in the
+repository:
 
+- `/data/json/unproj` - unprojected files
+- `/data/json/proj` - files projected using a [modified version of the
+  Albers](https://github.com/stamen/geo-albers-usa-territories) projection that
+  relocates Alaska, Hawaii, and territories to areas under the contiguous 48 states
+  
+Files are at three geographic levels (state, county, and congressional district)
+and three resolutions (500k, 5m, and 20m).
+
+# Building the files
 ## Dependencies
 
 In order to build the maps, you will need the following Javascript libraries
@@ -66,14 +82,13 @@ In all cases, final topojson files will be saved in either the
 `data/json/unprojected` or `data/json/projected` directory as determined by the
 `-p` flag.
 
-# Boundaries
+## Boundaries
 
-This script builds the following boundary files for each year selected:
+Files are at three levels:
 
 - State
 - County
 - Congressional district
-
 
 Each file contains boundaries for its level as well as those above it. 
 
@@ -91,15 +106,16 @@ Each file contains boundaries for its level as well as those above it.
   
 # Projections
 
-To project the topojson data files so that non-contiguous states and territories
-are moved for easier mapping, you will need to use the json scripts located in `assets/js`:
+To project the unprojected topojson data files to match the pre-projected files
+(non-contiguous states and territories are moved for easier mapping), you will
+need to use the JSON scripts located in `assets/js`:
 
 - `d3.v7.min.js`
 - `topojson.min.js`
 - `geoalbersuster.js`
 
-The first two scripts are general libraries for working with D3 and topojson
-files. The third file contains the scripts necessary for projecting the
+The first two scripts are general libraries necessary for working with D3 and
+topojson files. The third file contains the scripts necessary for projecting the
 unprojected maps with the key function:
 
 ``` javascript
@@ -108,12 +124,14 @@ const projection = geoAlbersUsaTerritories.geoAlbersUsaTerritories()
   .translate([width / 2, height / 2]);
 const path = d3.geoPath().projection(projection);
 ```
-  
-## Visualizing maps
+The unprojected files, however, can be projected using any other projection 
+available via the [D3 projection library](https://d3js.org/d3-geo/projection). 
+ 
+# Visualizing built maps
 
 If you would like to visualize the projected maps, start a local server in the
-root directory (see: npm local-web-server) and visit localhost page. From there,
-you can select the various maps via a drop down menu.
+root directory (see: npm local-web-server) and visit the localhost page in your
+browser. From there, you can select the various maps via a drop down menu.
 
 ``` bash
 $ > npm install local-web-server
@@ -132,4 +150,29 @@ these maps in other projects.
 
 - [Projection](https://github.com/stamen/geo-albers-usa-territories)
 - [Command line cartography](https://medium.com/@mbostock/command-line-cartography-part-1-897aa8f8ca2c)
+
+# Disclamer
+
+This software is licensed under the CC0 license. It is provided "as is" without
+any warranty of any kind, either expressed, implied, or statutory, including,
+but not limited to, any warranty that the subject software will conform to
+specifications, any implied warranties of merchantability, fitness for a
+particular purpose, or freedom from infringement, any warranty that the subject
+software will be error free, or any warranty that documentation, if provided,
+will conform to the subject software. This agreement does not, in any manner,
+constitute an endorsement by the National Endowment for the Humanities (NEH) or
+any prior recipient of any results, resulting designs, hardware, software
+products or any other applications resulting from use of the subject software.
+Further, NEH disclaims all warranties and liabilities regarding third-party
+software, if present in the original software, and distributes it "as is."
+
+The recipient agrees to waive any and all claims against the United States
+government, its contractors and subcontractors, as well as any prior recipient.
+If recipient’s use of the subject software results in any liabilities, demands,
+damages, expenses or losses arising from such use, including any damages from
+products based on, or resulting from, recipient’s use of the subject software,
+recipient shall indemnify and hold harmless the United States government, its
+contractors and subcontractors, as well as any prior recipient, to the extent
+permitted by law. Recipient’s sole remedy for any such matter shall be the
+immediate, unilateral termination of this agreement.
 
