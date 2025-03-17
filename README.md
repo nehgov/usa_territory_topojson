@@ -34,6 +34,11 @@ installed on your machine:
 
 You can get them each through npm: `npm install <package>`
 
+You will also need the following scripts in the `js` directory:
+
+- `condist_properties.js`
+- `county_properties.js`
+
 ## To build maps
 
 To build all topojson files, run the following command inside the `scripts/bash`
