@@ -135,8 +135,10 @@ available via the [D3 projection library](https://d3js.org/d3-geo/projection).
 # Visualizing built maps
 
 If you would like to visualize the projected maps, start a local server in the
-root directory (see: npm local-web-server) and visit the localhost page in your
-browser. From there, you can select the various maps via a drop down menu.
+root directory (see: [`npm
+local-web-server`](https://www.npmjs.com/package/local-web-server)) and visit
+the localhost page in your browser. From there, you can select the various maps
+via a drop down menu.
 
 ``` bash
 $ > npm install local-web-server
